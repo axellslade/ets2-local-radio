@@ -124,6 +124,18 @@
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
     <Compile Include="Station.cs" />
+    <Compile Include="UI\InfoView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\InfoView.Designer.cs">
+      <DependentUpon>InfoView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SettingsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\SettingsView.Designer.cs">
+      <DependentUpon>SettingsView.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -139,6 +151,12 @@
     </Compile>
     <EmbeddedResource Include="Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\InfoView.resx">
+      <DependentUpon>InfoView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SettingsView.resx">
+      <DependentUpon>SettingsView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest" />

@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Ets2SdkClient;
+using ETS2_Local_Radio_server.Logic;
 using ETS2_Local_Radio_server.Properties;
 using Gma.System.MouseKeyHook;
 using Microsoft.Win32;
@@ -75,21 +76,21 @@ namespace ETS2_Local_Radio_server
             CheckPlugins();
 
             //Load the keys:
-            nextKeyTextBox.Text = Settings.NextKey;
-            previousKeyTextBox.Text = Settings.PreviousKey;
-            stopKeyTextBox.Text = Settings.StopKey;
-            volumeUpKeyTextBox.Text = Settings.VolumeUpKey;
-            volumeDownKeyTextBox.Text = Settings.VolumeDownKey;
-            makeFavouriteKeyTextbox.Text = Settings.MakeFavouriteKey;
-            goToFavouriteKeyTextbox.Text = Settings.GoToFavouriteKey;
+            settingsView.nextKeyTextBox.Text = Settings.NextKey;
+            settingsView.previousKeyTextBox.Text = Settings.PreviousKey;
+            settingsView.stopKeyTextBox.Text = Settings.StopKey;
+            settingsView.volumeUpKeyTextBox.Text = Settings.VolumeUpKey;
+            settingsView.volumeDownKeyTextBox.Text = Settings.VolumeDownKey;
+            settingsView.makeFavouriteKeyTextbox.Text = Settings.MakeFavouriteKey;
+            settingsView.goToFavouriteKeyTextbox.Text = Settings.GoToFavouriteKey;
 
-            nextButtonTextBox.Text = Settings.NextButton;
-            previousButtonTextBox.Text = Settings.PreviousButton;
-            stopButtonTextBox.Text = Settings.StopButton;
-            volumeUpButtonTextBox.Text = Settings.VolumeUpButton;
-            volumeDownButtonTextBox.Text = Settings.VolumeDownButton;
-            makeFavouriteButtonTextbox.Text = Settings.MakeFavouriteButton;
-            goToFavouriteButtonTextbox.Text = Settings.GoToFavouriteButton;
+            settingsView.nextButtonTextBox.Text = Settings.NextButton;
+            settingsView.previousButtonTextBox.Text = Settings.PreviousButton;
+            settingsView.stopButtonTextBox.Text = Settings.StopButton;
+            settingsView.volumeUpButtonTextBox.Text = Settings.VolumeUpButton;
+            settingsView.volumeDownButtonTextBox.Text = Settings.VolumeDownButton;
+            settingsView.makeFavouriteButtonTextbox.Text = Settings.MakeFavouriteButton;
+            settingsView.goToFavouriteButtonTextbox.Text = Settings.GoToFavouriteButton;
 
             comboController.SelectedText = Settings.Controller;
 
@@ -127,21 +128,21 @@ namespace ETS2_Local_Radio_server
             currentGameTimer.Start();
 
             //Add handlers:
-            nextKeyTextBox.KeyDown += keyInput;
-            previousKeyTextBox.KeyDown += keyInput;
-            stopKeyTextBox.KeyDown += keyInput;
-            volumeUpKeyTextBox.KeyDown += keyInput;
-            volumeDownKeyTextBox.KeyDown += keyInput;
-            makeFavouriteKeyTextbox.KeyDown += keyInput;
-            goToFavouriteKeyTextbox.KeyDown += keyInput;
+            settingsView.nextKeyTextBox.KeyDown += keyInput;
+            settingsView.previousKeyTextBox.KeyDown += keyInput;
+            settingsView.stopKeyTextBox.KeyDown += keyInput;
+            settingsView.volumeUpKeyTextBox.KeyDown += keyInput;
+            settingsView.volumeDownKeyTextBox.KeyDown += keyInput;
+            settingsView.makeFavouriteKeyTextbox.KeyDown += keyInput;
+            settingsView.goToFavouriteKeyTextbox.KeyDown += keyInput;
 
             //Remove key binding:
-            nextKeyTextBox.KeyDown += removeBinding;
-            previousKeyTextBox.KeyDown += removeBinding;
-            stopKeyTextBox.KeyDown += removeBinding;
-            volumeUpKeyTextBox.KeyDown += removeBinding;
-            volumeDownKeyTextBox.KeyDown += removeBinding;
-            makeFavouriteKeyTextbox.KeyDown += removeBinding;
+            settingsView.nextKeyTextBox.KeyDown += removeBinding;
+            settingsView.previousKeyTextBox.KeyDown += removeBinding;
+            settingsView.stopKeyTextBox.KeyDown += removeBinding;
+            settingsView.volumeUpKeyTextBox.KeyDown += removeBinding;
+            settingsView.volumeDownKeyTextBox.KeyDown += removeBinding;
+            settingsView.makeFavouriteKeyTextbox.KeyDown += removeBinding;
             goToFavouriteKeyTextbox.KeyDown += removeBinding;
 
             nextButtonTextBox.KeyDown += removeBinding;
@@ -178,7 +179,8 @@ namespace ETS2_Local_Radio_server
 
         private void CheckPlugins()
         {
-            if (PluginExists("ats"))
+            Plugins plugins = new Plugins();
+            if (plugins.Check("ats"))
             {
                 installAtsButton.Image = Resources.check;
             }
@@ -186,7 +188,7 @@ namespace ETS2_Local_Radio_server
             {
                 installAtsButton.Image = null;
             }
-            if (PluginExists("ets2"))
+            if (plugins.Check("ets2"))
             {
                 installEts2Button.Image = Resources.check;
             }
@@ -194,7 +196,7 @@ namespace ETS2_Local_Radio_server
             {
                 installEts2Button.Image = null;
             }
-            if (!PluginExists("ats") && !PluginExists("ets2"))
+            if (!plugins.Check("ats") && !plugins.Check("ets2"))
             {
                 groupInfo.Enabled = false;
                 groupSettings.Enabled = false;
@@ -203,52 +205,6 @@ namespace ETS2_Local_Radio_server
             {
                 groupInfo.Enabled = true;
                 groupSettings.Enabled = true;
-            }
-        }
-
-        private bool PluginExists(string game)
-        {
-            string folder = "";
-            if (game == "ets2")
-            {
-                folder = Settings.Ets2Folder;
-            }
-            if (game == "ats")
-            {
-                folder = Settings.AtsFolder;
-            }
-            try
-            {
-                if (folder != null)
-                {
-                    if (Directory.Exists(folder + @"\bin\win_x86\plugins") &&
-                        Directory.Exists(folder + @"\bin\win_x64\plugins"))
-                    {
-                        if (
-                            File.Exists(folder + @"\bin\win_x86\plugins\ets2-telemetry.dll") &&
-                            File.Exists(folder + @"\bin\win_x64\plugins\ets2-telemetry.dll"))
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
             }
         }
 
@@ -316,10 +272,10 @@ namespace ETS2_Local_Radio_server
             {
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
-                    comboIP.Items.Add("http://" + ip.ToString() + ":" + Settings.Port);
+                    infoView.comboIP.Items.Add("http://" + ip.ToString() + ":" + Settings.Port);
                 }
             }
-            comboIP.SelectedIndex = 0;
+            infoView.comboIP.SelectedIndex = 0;
         }
 
         private bool AttachJoystick()
@@ -357,22 +313,22 @@ namespace ETS2_Local_Radio_server
 
                 ets2data = data;
                 coordinates = new Coordinates(data.Physics.CoordinateX, data.Physics.CoordinateY, data.Physics.CoordinateZ);
-                locationLabel.Text = coordinates.X + "; " + coordinates.Y + "; " + coordinates.Z;
+                infoView.locationLabel.Text = coordinates.X + "; " + coordinates.Y + "; " + coordinates.Z;
 
                 if (data.Version.Ets2Major == 0)
                 {
-                    statusLabel.Text = simulatorNotRunning;
-                    statusLabel.ForeColor = Color.Red;
+                    infoView.statusLabel.Text = simulatorNotRunning;
+                    infoView.statusLabel.ForeColor = Color.Red;
                 }
                 else if (data.Time == 0)
                 {
-                    statusLabel.Text = simulatorNotDriving;
-                    statusLabel.ForeColor = Color.DarkOrange;
+                    infoView.statusLabel.Text = simulatorNotDriving;
+                    infoView.statusLabel.ForeColor = Color.DarkOrange;
                 }
                 else
                 {
-                    statusLabel.Text = simulatorRunning;
-                    statusLabel.ForeColor = Color.DarkGreen;
+                    infoView.statusLabel.Text = simulatorRunning;
+                    infoView.statusLabel.ForeColor = Color.DarkGreen;
                 }
             }
             catch (Exception ex)
@@ -584,7 +540,7 @@ namespace ETS2_Local_Radio_server
 
         private void URLLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(comboIP.SelectedItem.ToString());
+            Process.Start(infoView.comboIP.SelectedItem.ToString());
         }
 
         private void Koenvh_Click(object sender, EventArgs e)
@@ -600,14 +556,14 @@ namespace ETS2_Local_Radio_server
                 dynamic server = language.GetFile();
 
                 groupInfo.Text = (server["info"] ?? groupInfo.Text);
-                gameInfo.Text = (server["game"] ?? gameInfo.Text);
-                statusInfo.Text = (server["status"] ?? statusInfo.Text);
+                infoView.gameInfo.Text = (server["game"] ?? infoView.gameInfo.Text);
+                infoView.statusInfo.Text = (server["status"] ?? infoView.statusInfo.Text);
                 simulatorNotRunning = (server["simulator-not-running"] ?? simulatorNotRunning);
                 simulatorNotDriving = (server["simulator-not-driving"] ?? simulatorNotDriving);
                 simulatorRunning = (server["simulator-running"] ?? simulatorRunning);
-                coordinatesInfo.Text = (server["coordinates"] ?? coordinatesInfo.Text);
-                URLInfo.Text = (server["url"] ?? URLInfo.Text);
-                URLLabel.Text = (server["open-local-radio"] ?? URLLabel.Text);
+                infoView.coordinatesInfo.Text = (server["coordinates"] ?? infoView.coordinatesInfo.Text);
+                infoView.URLInfo.Text = (server["url"] ?? infoView.URLInfo.Text);
+                infoView.URLLabel.Text = (server["open-local-radio"] ?? infoView.URLLabel.Text);
                 groupSettings.Text = (server["settings"] ?? groupSettings.Text);
                 keyLabel.Text = (server["keyboard"] ?? keyLabel.Text);
                 buttonLabel.Text = (server["controller"] ?? buttonLabel.Text);
@@ -769,7 +725,7 @@ namespace ETS2_Local_Radio_server
                 if (Process.GetProcessesByName("eurotrucks2").Length > 0)
                 {
                     currentGame = "ets2";
-                    gameLabel.Text = "Euro Truck Simulator 2";
+                    infoView.gameLabel.Text = "Euro Truck Simulator 2";
                     writeFile("game", "0", "0");
                 }
             }
@@ -778,7 +734,7 @@ namespace ETS2_Local_Radio_server
                 if (Process.GetProcessesByName("amtrucks").Length > 0)
                 {
                     currentGame = "ats";
-                    gameLabel.Text = "American Truck Simulator";
+                    infoView.gameLabel.Text = "American Truck Simulator";
                     writeFile("game", "0", "0");
                 }
             }
