@@ -57,7 +57,7 @@
             // goToFavouriteButtonTextbox
             // 
             this.goToFavouriteButtonTextbox.BackColor = System.Drawing.SystemColors.Window;
-            this.goToFavouriteButtonTextbox.Location = new System.Drawing.Point(330, 179);
+            this.goToFavouriteButtonTextbox.Location = new System.Drawing.Point(330, 175);
             this.goToFavouriteButtonTextbox.Name = "goToFavouriteButtonTextbox";
             this.goToFavouriteButtonTextbox.ReadOnly = true;
             this.goToFavouriteButtonTextbox.ShortcutsEnabled = false;
@@ -67,16 +67,17 @@
             // goToFavouriteKeyLabel
             // 
             this.goToFavouriteKeyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.goToFavouriteKeyLabel.Location = new System.Drawing.Point(4, 179);
+            this.goToFavouriteKeyLabel.Location = new System.Drawing.Point(4, 175);
             this.goToFavouriteKeyLabel.Name = "goToFavouriteKeyLabel";
             this.goToFavouriteKeyLabel.Size = new System.Drawing.Size(224, 22);
             this.goToFavouriteKeyLabel.TabIndex = 47;
             this.goToFavouriteKeyLabel.Text = "Go to favourite key:";
             this.goToFavouriteKeyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.goToFavouriteKeyLabel.Click += new System.EventHandler(this.goToFavouriteKeyLabel_Click);
             // 
             // goToFavouriteKeyTextbox
             // 
-            this.goToFavouriteKeyTextbox.Location = new System.Drawing.Point(234, 179);
+            this.goToFavouriteKeyTextbox.Location = new System.Drawing.Point(234, 175);
             this.goToFavouriteKeyTextbox.Name = "goToFavouriteKeyTextbox";
             this.goToFavouriteKeyTextbox.ShortcutsEnabled = false;
             this.goToFavouriteKeyTextbox.Size = new System.Drawing.Size(60, 20);
@@ -85,7 +86,7 @@
             // buttonLabel
             // 
             this.buttonLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.buttonLabel.Location = new System.Drawing.Point(315, 0);
+            this.buttonLabel.Location = new System.Drawing.Point(315, -4);
             this.buttonLabel.Name = "buttonLabel";
             this.buttonLabel.Size = new System.Drawing.Size(90, 20);
             this.buttonLabel.TabIndex = 45;
@@ -95,7 +96,7 @@
             // keyLabel
             // 
             this.keyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.keyLabel.Location = new System.Drawing.Point(219, 0);
+            this.keyLabel.Location = new System.Drawing.Point(219, -4);
             this.keyLabel.Name = "keyLabel";
             this.keyLabel.Size = new System.Drawing.Size(90, 20);
             this.keyLabel.TabIndex = 44;
@@ -105,7 +106,7 @@
             // makeFavouriteButtonTextbox
             // 
             this.makeFavouriteButtonTextbox.BackColor = System.Drawing.SystemColors.Window;
-            this.makeFavouriteButtonTextbox.Location = new System.Drawing.Point(330, 153);
+            this.makeFavouriteButtonTextbox.Location = new System.Drawing.Point(330, 149);
             this.makeFavouriteButtonTextbox.Name = "makeFavouriteButtonTextbox";
             this.makeFavouriteButtonTextbox.ReadOnly = true;
             this.makeFavouriteButtonTextbox.ShortcutsEnabled = false;
@@ -115,7 +116,7 @@
             // volumeDownButtonTextBox
             // 
             this.volumeDownButtonTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.volumeDownButtonTextBox.Location = new System.Drawing.Point(330, 127);
+            this.volumeDownButtonTextBox.Location = new System.Drawing.Point(330, 123);
             this.volumeDownButtonTextBox.Name = "volumeDownButtonTextBox";
             this.volumeDownButtonTextBox.ReadOnly = true;
             this.volumeDownButtonTextBox.ShortcutsEnabled = false;
@@ -125,7 +126,7 @@
             // volumeUpButtonTextBox
             // 
             this.volumeUpButtonTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.volumeUpButtonTextBox.Location = new System.Drawing.Point(330, 101);
+            this.volumeUpButtonTextBox.Location = new System.Drawing.Point(330, 97);
             this.volumeUpButtonTextBox.Name = "volumeUpButtonTextBox";
             this.volumeUpButtonTextBox.ReadOnly = true;
             this.volumeUpButtonTextBox.ShortcutsEnabled = false;
@@ -135,7 +136,7 @@
             // stopButtonTextBox
             // 
             this.stopButtonTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.stopButtonTextBox.Location = new System.Drawing.Point(330, 75);
+            this.stopButtonTextBox.Location = new System.Drawing.Point(330, 71);
             this.stopButtonTextBox.Name = "stopButtonTextBox";
             this.stopButtonTextBox.ReadOnly = true;
             this.stopButtonTextBox.ShortcutsEnabled = false;
@@ -145,7 +146,7 @@
             // previousButtonTextBox
             // 
             this.previousButtonTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.previousButtonTextBox.Location = new System.Drawing.Point(330, 49);
+            this.previousButtonTextBox.Location = new System.Drawing.Point(330, 45);
             this.previousButtonTextBox.Name = "previousButtonTextBox";
             this.previousButtonTextBox.ReadOnly = true;
             this.previousButtonTextBox.ShortcutsEnabled = false;
@@ -155,7 +156,7 @@
             // nextButtonTextBox
             // 
             this.nextButtonTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.nextButtonTextBox.Location = new System.Drawing.Point(330, 23);
+            this.nextButtonTextBox.Location = new System.Drawing.Point(330, 19);
             this.nextButtonTextBox.Name = "nextButtonTextBox";
             this.nextButtonTextBox.ReadOnly = true;
             this.nextButtonTextBox.ShortcutsEnabled = false;
@@ -165,7 +166,7 @@
             // makeFavouriteKeyLabel
             // 
             this.makeFavouriteKeyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.makeFavouriteKeyLabel.Location = new System.Drawing.Point(4, 153);
+            this.makeFavouriteKeyLabel.Location = new System.Drawing.Point(4, 149);
             this.makeFavouriteKeyLabel.Name = "makeFavouriteKeyLabel";
             this.makeFavouriteKeyLabel.Size = new System.Drawing.Size(224, 22);
             this.makeFavouriteKeyLabel.TabIndex = 37;
@@ -174,7 +175,7 @@
             // 
             // makeFavouriteKeyTextbox
             // 
-            this.makeFavouriteKeyTextbox.Location = new System.Drawing.Point(234, 153);
+            this.makeFavouriteKeyTextbox.Location = new System.Drawing.Point(234, 149);
             this.makeFavouriteKeyTextbox.Name = "makeFavouriteKeyTextbox";
             this.makeFavouriteKeyTextbox.ShortcutsEnabled = false;
             this.makeFavouriteKeyTextbox.Size = new System.Drawing.Size(60, 20);
@@ -183,7 +184,7 @@
             // volumeDownKeyLabel
             // 
             this.volumeDownKeyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.volumeDownKeyLabel.Location = new System.Drawing.Point(4, 127);
+            this.volumeDownKeyLabel.Location = new System.Drawing.Point(4, 123);
             this.volumeDownKeyLabel.Name = "volumeDownKeyLabel";
             this.volumeDownKeyLabel.Size = new System.Drawing.Size(224, 22);
             this.volumeDownKeyLabel.TabIndex = 35;
@@ -193,7 +194,7 @@
             // volumeUpKeyLabel
             // 
             this.volumeUpKeyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.volumeUpKeyLabel.Location = new System.Drawing.Point(4, 101);
+            this.volumeUpKeyLabel.Location = new System.Drawing.Point(4, 97);
             this.volumeUpKeyLabel.Name = "volumeUpKeyLabel";
             this.volumeUpKeyLabel.Size = new System.Drawing.Size(224, 22);
             this.volumeUpKeyLabel.TabIndex = 34;
@@ -202,7 +203,7 @@
             // 
             // volumeDownKeyTextBox
             // 
-            this.volumeDownKeyTextBox.Location = new System.Drawing.Point(234, 127);
+            this.volumeDownKeyTextBox.Location = new System.Drawing.Point(234, 123);
             this.volumeDownKeyTextBox.Name = "volumeDownKeyTextBox";
             this.volumeDownKeyTextBox.ShortcutsEnabled = false;
             this.volumeDownKeyTextBox.Size = new System.Drawing.Size(60, 20);
@@ -210,7 +211,7 @@
             // 
             // volumeUpKeyTextBox
             // 
-            this.volumeUpKeyTextBox.Location = new System.Drawing.Point(234, 101);
+            this.volumeUpKeyTextBox.Location = new System.Drawing.Point(234, 97);
             this.volumeUpKeyTextBox.Name = "volumeUpKeyTextBox";
             this.volumeUpKeyTextBox.ShortcutsEnabled = false;
             this.volumeUpKeyTextBox.Size = new System.Drawing.Size(60, 20);
@@ -219,7 +220,7 @@
             // previousKeyLabel
             // 
             this.previousKeyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.previousKeyLabel.Location = new System.Drawing.Point(4, 49);
+            this.previousKeyLabel.Location = new System.Drawing.Point(4, 45);
             this.previousKeyLabel.Name = "previousKeyLabel";
             this.previousKeyLabel.Size = new System.Drawing.Size(224, 22);
             this.previousKeyLabel.TabIndex = 31;
@@ -229,7 +230,7 @@
             // stopKeyLabel
             // 
             this.stopKeyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.stopKeyLabel.Location = new System.Drawing.Point(4, 75);
+            this.stopKeyLabel.Location = new System.Drawing.Point(4, 71);
             this.stopKeyLabel.Name = "stopKeyLabel";
             this.stopKeyLabel.Size = new System.Drawing.Size(224, 22);
             this.stopKeyLabel.TabIndex = 30;
@@ -239,7 +240,7 @@
             // nextKeyLabel
             // 
             this.nextKeyLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.nextKeyLabel.Location = new System.Drawing.Point(4, 23);
+            this.nextKeyLabel.Location = new System.Drawing.Point(4, 19);
             this.nextKeyLabel.Name = "nextKeyLabel";
             this.nextKeyLabel.Size = new System.Drawing.Size(224, 22);
             this.nextKeyLabel.TabIndex = 29;
@@ -248,7 +249,7 @@
             // 
             // stopKeyTextBox
             // 
-            this.stopKeyTextBox.Location = new System.Drawing.Point(234, 75);
+            this.stopKeyTextBox.Location = new System.Drawing.Point(234, 71);
             this.stopKeyTextBox.Name = "stopKeyTextBox";
             this.stopKeyTextBox.ShortcutsEnabled = false;
             this.stopKeyTextBox.Size = new System.Drawing.Size(60, 20);
@@ -257,16 +258,17 @@
             // saveButton
             // 
             this.saveButton.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.saveButton.Location = new System.Drawing.Point(298, 212);
+            this.saveButton.Location = new System.Drawing.Point(298, 208);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(105, 34);
             this.saveButton.TabIndex = 25;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // previousKeyTextBox
             // 
-            this.previousKeyTextBox.Location = new System.Drawing.Point(234, 49);
+            this.previousKeyTextBox.Location = new System.Drawing.Point(234, 45);
             this.previousKeyTextBox.Name = "previousKeyTextBox";
             this.previousKeyTextBox.ShortcutsEnabled = false;
             this.previousKeyTextBox.Size = new System.Drawing.Size(60, 20);
@@ -274,7 +276,7 @@
             // 
             // nextKeyTextBox
             // 
-            this.nextKeyTextBox.Location = new System.Drawing.Point(234, 23);
+            this.nextKeyTextBox.Location = new System.Drawing.Point(234, 19);
             this.nextKeyTextBox.Name = "nextKeyTextBox";
             this.nextKeyTextBox.ShortcutsEnabled = false;
             this.nextKeyTextBox.Size = new System.Drawing.Size(60, 20);
@@ -310,6 +312,7 @@
             this.Controls.Add(this.nextKeyTextBox);
             this.Name = "SettingsView";
             this.Size = new System.Drawing.Size(407, 246);
+            this.Load += new System.EventHandler(this.SettingsView_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -317,29 +320,29 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox goToFavouriteButtonTextbox;
-        private System.Windows.Forms.Label goToFavouriteKeyLabel;
-        private System.Windows.Forms.TextBox goToFavouriteKeyTextbox;
-        private System.Windows.Forms.Label buttonLabel;
-        private System.Windows.Forms.Label keyLabel;
-        private System.Windows.Forms.TextBox makeFavouriteButtonTextbox;
-        private System.Windows.Forms.TextBox volumeDownButtonTextBox;
-        private System.Windows.Forms.TextBox volumeUpButtonTextBox;
-        private System.Windows.Forms.TextBox stopButtonTextBox;
-        private System.Windows.Forms.TextBox previousButtonTextBox;
-        private System.Windows.Forms.TextBox nextButtonTextBox;
-        private System.Windows.Forms.Label makeFavouriteKeyLabel;
-        private System.Windows.Forms.TextBox makeFavouriteKeyTextbox;
-        private System.Windows.Forms.Label volumeDownKeyLabel;
-        private System.Windows.Forms.Label volumeUpKeyLabel;
-        private System.Windows.Forms.TextBox volumeDownKeyTextBox;
-        private System.Windows.Forms.TextBox volumeUpKeyTextBox;
-        private System.Windows.Forms.Label previousKeyLabel;
-        private System.Windows.Forms.Label stopKeyLabel;
-        private System.Windows.Forms.Label nextKeyLabel;
-        private System.Windows.Forms.TextBox stopKeyTextBox;
-        private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.TextBox previousKeyTextBox;
-        private System.Windows.Forms.TextBox nextKeyTextBox;
+        public System.Windows.Forms.TextBox goToFavouriteButtonTextbox;
+        public System.Windows.Forms.Label goToFavouriteKeyLabel;
+        public System.Windows.Forms.TextBox goToFavouriteKeyTextbox;
+        public System.Windows.Forms.Label buttonLabel;
+        public System.Windows.Forms.Label keyLabel;
+        public System.Windows.Forms.TextBox makeFavouriteButtonTextbox;
+        public System.Windows.Forms.TextBox volumeDownButtonTextBox;
+        public System.Windows.Forms.TextBox volumeUpButtonTextBox;
+        public System.Windows.Forms.TextBox stopButtonTextBox;
+        public System.Windows.Forms.TextBox previousButtonTextBox;
+        public System.Windows.Forms.TextBox nextButtonTextBox;
+        public System.Windows.Forms.Label makeFavouriteKeyLabel;
+        public System.Windows.Forms.TextBox makeFavouriteKeyTextbox;
+        public System.Windows.Forms.Label volumeDownKeyLabel;
+        public System.Windows.Forms.Label volumeUpKeyLabel;
+        public System.Windows.Forms.TextBox volumeDownKeyTextBox;
+        public System.Windows.Forms.TextBox volumeUpKeyTextBox;
+        public System.Windows.Forms.Label previousKeyLabel;
+        public System.Windows.Forms.Label stopKeyLabel;
+        public System.Windows.Forms.Label nextKeyLabel;
+        public System.Windows.Forms.TextBox stopKeyTextBox;
+        public System.Windows.Forms.Button saveButton;
+        public System.Windows.Forms.TextBox previousKeyTextBox;
+        public System.Windows.Forms.TextBox nextKeyTextBox;
     }
 }

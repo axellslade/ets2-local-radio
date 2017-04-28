@@ -53,11 +53,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.Koenvh)).BeginInit();
             this.SuspendLayout();
             // 
-            // keyTimeout
-            // 
-            this.keyTimeout.Interval = 10;
-            this.keyTimeout.Tick += new System.EventHandler(this.keyTimeout_Tick);
-            // 
             // groupSettings
             // 
             this.groupSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 

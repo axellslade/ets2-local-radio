@@ -5,28 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETS2_Local_Radio_server
+namespace ETS2_Local_Radio_server.Logic
 {
     public class Commands
     {
-        public string id;
-        public string action;
-        public string amount;
-        public string language;
-        public string game;
+        public string Id;
+        public string Command;
+        public string Language;
+        public string Game;
    
-        public Commands(string _id, string _action, string _amount, string _language, string _game)
+        public Commands(string command)
         {
-            id = _id;
-            action = _action;
-            amount = _amount;
-            language = _language;
-            game = _game;
-        }
-
-        public Commands(string _id, string _action, string _amount, string _language) : this(_id, _action, _amount, _language, Main.currentGame)
-        {
-            
+            Id = Guid.NewGuid().ToString("n");
+            Language = Settings.Language;
+            Game = Program.Game;
         }
     }
 }

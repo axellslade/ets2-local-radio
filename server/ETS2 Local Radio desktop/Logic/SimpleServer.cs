@@ -11,8 +11,10 @@ using System.Threading;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+using WebSocketSharp.Server;
 
-namespace ETS2_Local_Radio_server
+namespace ETS2_Local_Radio_server.Logic
 {
     public class SimpleHTTPServer
     {
@@ -98,10 +100,12 @@ namespace ETS2_Local_Radio_server
         private HttpListener _listener;
         private int _port;
 
+        private WebSocketServer _ws;
+
         public int Port
         {
             get { return _port; }
-            private set { }
+            private set { _port = value; }
         }
 
         /// <summary>
@@ -142,7 +146,7 @@ namespace ETS2_Local_Radio_server
             try
             {
                 _listener = new HttpListener();
-                _listener.Prefixes.Add("http://+:" + _port.ToString() + "/");
+                _listener.Prefixes.Add("http://+:" + _port + "/");
                 TimeSpan timeOut = TimeSpan.FromSeconds(2);
                 /*
                 _listener.TimeoutManager.DrainEntityBody = timeOut;
@@ -261,7 +265,7 @@ namespace ETS2_Local_Radio_server
             }
             else if (context.Request.Url.AbsolutePath == "/api/")
             {
-                string text = Newtonsoft.Json.JsonConvert.SerializeObject(Main.ets2data);
+                string text = Newtonsoft.Json.JsonConvert.SerializeObject(Program.Ets2data);
 
                 context.Response.ContentType = "application/json";
                 context.Response.ContentLength64 = Encoding.UTF8.GetBytes(text).Length;
@@ -271,7 +275,7 @@ namespace ETS2_Local_Radio_server
             }
             else if (context.Request.Url.AbsolutePath == "/commands/")
             {
-                string text = Newtonsoft.Json.JsonConvert.SerializeObject(Main.commandsData);
+                string text = Newtonsoft.Json.JsonConvert.SerializeObject(Program.CommandsData);
 
                 context.Response.ContentType = "application/json";
                 context.Response.ContentLength64 = Encoding.UTF8.GetBytes(text).Length;
@@ -327,6 +331,11 @@ namespace ETS2_Local_Radio_server
             this._port = port;
             _serverThread = new Thread(this.Listen);
             _serverThread.Start();
+
+            _ws = new WebSocketServer(_port);
+            _ws.AddWebSocketService<CommandService>("/commands");
+            _ws.ReuseAddress = true;
+            //_ws.Start();
         }
     }
 }

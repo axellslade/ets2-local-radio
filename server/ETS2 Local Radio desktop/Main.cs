@@ -17,10 +17,12 @@ using System.Windows.Forms;
 using Ets2SdkClient;
 using ETS2_Local_Radio_server.Logic;
 using ETS2_Local_Radio_server.Properties;
+using ETS2_Local_Radio_server.UI;
 using Gma.System.MouseKeyHook;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Settings = ETS2_Local_Radio_server.Logic.Settings;
 
 namespace ETS2_Local_Radio_server
 {
@@ -28,18 +30,16 @@ namespace ETS2_Local_Radio_server
     {
         public Ets2SdkTelemetry Telemetry;
 
-        public SimpleHTTPServer myServer;
+        public SimpleHTTPServer MyServer;
 
-        private IKeyboardMouseEvents m_GlobalHook;
-        private SimpleJoystick joystick;
+        private SimpleJoystick _joystick;
+        private Input _input;
+
+        private Firewall _firewall;
+
         private bool[] previousState;
 
-        public int amount = 0;
-
         public static Coordinates coordinates;
-
-        public static object ets2data;
-        public static Commands commandsData;
 
         public static string simulatorNotRunning = "Simulator not yet running";
         public static string simulatorNotDriving = "Simulator running, let's get driving!";
@@ -51,8 +51,6 @@ namespace ETS2_Local_Radio_server
         public static string removeOverlay =
             "Do you want to remove the in-game overlay?\n(This will remove any existing d3d9.dll)";
 
-        public static string currentGame = "ets2";
-
         public Main()
         {
             InitializeComponent();
@@ -63,34 +61,17 @@ namespace ETS2_Local_Radio_server
             Log.Clear();
             Settings.Load();
 
-            //Global keyboard hook logic by https://github.com/gmamaladze/globalmousekeyhook/blob/vNext/Demo/Main.cs
-            Subscribe();
+            _input = new Input();
+            _input.Subscribe();
 
-            //Add Firewall exception
-            AddException();
+            _firewall = new Firewall();
+            _firewall.AddException();
 
             //Load languages to combobox:
             LoadLanguages();
 
             //Check plugins:
             CheckPlugins();
-
-            //Load the keys:
-            settingsView.nextKeyTextBox.Text = Settings.NextKey;
-            settingsView.previousKeyTextBox.Text = Settings.PreviousKey;
-            settingsView.stopKeyTextBox.Text = Settings.StopKey;
-            settingsView.volumeUpKeyTextBox.Text = Settings.VolumeUpKey;
-            settingsView.volumeDownKeyTextBox.Text = Settings.VolumeDownKey;
-            settingsView.makeFavouriteKeyTextbox.Text = Settings.MakeFavouriteKey;
-            settingsView.goToFavouriteKeyTextbox.Text = Settings.GoToFavouriteKey;
-
-            settingsView.nextButtonTextBox.Text = Settings.NextButton;
-            settingsView.previousButtonTextBox.Text = Settings.PreviousButton;
-            settingsView.stopButtonTextBox.Text = Settings.StopButton;
-            settingsView.volumeUpButtonTextBox.Text = Settings.VolumeUpButton;
-            settingsView.volumeDownButtonTextBox.Text = Settings.VolumeDownButton;
-            settingsView.makeFavouriteButtonTextbox.Text = Settings.MakeFavouriteButton;
-            settingsView.goToFavouriteButtonTextbox.Text = Settings.GoToFavouriteButton;
 
             comboController.SelectedText = Settings.Controller;
 
@@ -110,15 +91,12 @@ namespace ETS2_Local_Radio_server
             }
 
             //Open server:
-            myServer = new SimpleHTTPServer(Directory.GetCurrentDirectory() + "\\web", Settings.Port);
-            writeFile("none", "0", "0");
-
-            //Load IP addresses:
-            LoadAddresses();
+            MyServer = new SimpleHTTPServer(Directory.GetCurrentDirectory() + "\\web", Settings.Port);
+            Program.CommandsData = new Commands("None");
 
             if (AttachJoystick())
             {
-                foreach (var item in joystick.AvailableDevices)
+                foreach (var item in _joystick.AvailableDevices)
                 {
                     comboController.Items.Add(item.InstanceName);
                 }
@@ -127,31 +105,7 @@ namespace ETS2_Local_Radio_server
 
             currentGameTimer.Start();
 
-            //Add handlers:
-            settingsView.nextKeyTextBox.KeyDown += keyInput;
-            settingsView.previousKeyTextBox.KeyDown += keyInput;
-            settingsView.stopKeyTextBox.KeyDown += keyInput;
-            settingsView.volumeUpKeyTextBox.KeyDown += keyInput;
-            settingsView.volumeDownKeyTextBox.KeyDown += keyInput;
-            settingsView.makeFavouriteKeyTextbox.KeyDown += keyInput;
-            settingsView.goToFavouriteKeyTextbox.KeyDown += keyInput;
-
-            //Remove key binding:
-            settingsView.nextKeyTextBox.KeyDown += removeBinding;
-            settingsView.previousKeyTextBox.KeyDown += removeBinding;
-            settingsView.stopKeyTextBox.KeyDown += removeBinding;
-            settingsView.volumeUpKeyTextBox.KeyDown += removeBinding;
-            settingsView.volumeDownKeyTextBox.KeyDown += removeBinding;
-            settingsView.makeFavouriteKeyTextbox.KeyDown += removeBinding;
-            goToFavouriteKeyTextbox.KeyDown += removeBinding;
-
-            nextButtonTextBox.KeyDown += removeBinding;
-            previousButtonTextBox.KeyDown += removeBinding;
-            stopButtonTextBox.KeyDown += removeBinding;
-            volumeUpButtonTextBox.KeyDown += removeBinding;
-            volumeDownButtonTextBox.KeyDown += removeBinding;
-            makeFavouriteButtonTextbox.KeyDown += removeBinding;
-            goToFavouriteButtonTextbox.KeyDown += removeBinding;
+            
         }
 
         private void LoadLanguages()
@@ -180,22 +134,8 @@ namespace ETS2_Local_Radio_server
         private void CheckPlugins()
         {
             Plugins plugins = new Plugins();
-            if (plugins.Check("ats"))
-            {
-                installAtsButton.Image = Resources.check;
-            }
-            else
-            {
-                installAtsButton.Image = null;
-            }
-            if (plugins.Check("ets2"))
-            {
-                installEts2Button.Image = Resources.check;
-            }
-            else
-            {
-                installEts2Button.Image = null;
-            }
+            installAtsButton.Image = plugins.Check("ats") ? Resources.check : null;
+            installEts2Button.Image = plugins.Check("ets2") ? Resources.check : null;
             if (!plugins.Check("ats") && !plugins.Check("ets2"))
             {
                 groupInfo.Enabled = false;
@@ -264,20 +204,6 @@ namespace ETS2_Local_Radio_server
             }
         }
 
-        private void LoadAddresses()
-        {
-            IPHostEntry host;
-            host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    infoView.comboIP.Items.Add("http://" + ip.ToString() + ":" + Settings.Port);
-                }
-            }
-            infoView.comboIP.SelectedIndex = 0;
-        }
-
         private bool AttachJoystick()
         {
             try
@@ -288,7 +214,7 @@ namespace ETS2_Local_Radio_server
                 {
                     name = Settings.Controller;
                 }
-                joystick = new SimpleJoystick(name);
+                _joystick = new SimpleJoystick(name);
 
                 //Start joystick input timer:
                 joystickTimer.Start();
@@ -311,7 +237,7 @@ namespace ETS2_Local_Radio_server
                     return;
                 }
 
-                ets2data = data;
+                Program.Ets2data = data;
                 coordinates = new Coordinates(data.Physics.CoordinateX, data.Physics.CoordinateY, data.Physics.CoordinateZ);
                 infoView.locationLabel.Text = coordinates.X + "; " + coordinates.Y + "; " + coordinates.Z;
 
@@ -337,41 +263,17 @@ namespace ETS2_Local_Radio_server
             }
         }
 
-        private static void DeleteException()
-        {
-            Process netsh = new Process();
-            string arguments = "advfirewall firewall delete rule name=\"ETS2 Local Radio\" dir=in protocol=TCP localport=" + Settings.Port;
-            netsh.StartInfo.FileName = "netsh";
-            netsh.StartInfo.Arguments = arguments;
-            netsh.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            netsh.Start();
-        }
-
-        private static void AddException()
-        {
-            DeleteException();
-            // to prevent duplicates
-
-            Process netsh = new Process();
-            string arguments = "advfirewall firewall add rule name=\"ETS2 Local Radio\" dir=in action=allow protocol=TCP localport=" + Settings.Port;
-            netsh.StartInfo.FileName = "netsh";
-            netsh.StartInfo.Arguments = arguments;
-            netsh.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            netsh.Start();
-        }
-
         private void Main_FormClosing(object sender, EventArgs e)
         {
             try
             {
                 //Global keyboard hook logic by https://github.com/gmamaladze/globalmousekeyhook/blob/vNext/Demo/Main.cs
                 Settings.Save();
-                Unsubscribe();
-                myServer.Stop();
-                writeFile("none", "0", "0");
-                DeleteException();
+                _input.Unsubscribe();
+                MyServer.Stop();
+                _firewall.DeleteException();
                 joystickTimer.Stop();
-                joystick.Release();
+                _joystick.Release();
             }
             catch (Exception ex)
             {
@@ -381,166 +283,6 @@ namespace ETS2_Local_Radio_server
             {
                 Application.Exit();
             }
-        }
-
-        public void Subscribe()
-        {
-            // Note: for the application hook, use the Hook.AppEvents() instead
-            m_GlobalHook = Hook.GlobalEvents();
-
-            m_GlobalHook.KeyDown += GlobalHookKeyDown;
-        }
-
-        private void GlobalHookKeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (Settings.PreviousKey != "" && e.KeyCode == (Keys)Enum.Parse(typeof(Keys), Settings.PreviousKey, true))
-                {
-                    Console.WriteLine("Fired event PreviousKey");
-                    keyTimeout.Stop();
-                    amount--;
-                    keyTimeout.Start();
-                }
-
-                if (Settings.NextKey != "" && e.KeyCode == (Keys)Enum.Parse(typeof(Keys), Settings.NextKey, true))
-                {
-                    Console.WriteLine("Fired event NextKey");
-                    keyTimeout.Stop();
-                    amount++;
-                    keyTimeout.Start();
-                }
-                if (Settings.StopKey != "" && e.KeyCode == (Keys)Enum.Parse(typeof(Keys), Settings.StopKey, true))
-                {
-                    Console.WriteLine("Fired event StopKey");
-
-                    writeFile("stop", "0");
-                }
-                if (Settings.VolumeUpKey != "" && e.KeyCode == (Keys)Enum.Parse(typeof(Keys), Settings.VolumeUpKey, true))
-                {
-                    Console.WriteLine("Fired event VolumeUpKey");
-
-                    writeFile("volume", "5");
-                }
-                if (Settings.VolumeDownKey != "" && e.KeyCode == (Keys)Enum.Parse(typeof(Keys), Settings.VolumeDownKey, true))
-                {
-                    Console.WriteLine("Fired event VolumeDownKey");
-
-                    writeFile("volume", "-5");
-                }
-                if (Settings.MakeFavouriteKey != "" && e.KeyCode == (Keys)Enum.Parse(typeof(Keys), Settings.MakeFavouriteKey, true))
-                {
-                    Console.WriteLine("Fired event MakeFavouriteKey");
-
-                    writeFile("favourite", "0");
-                }
-                if (Settings.GoToFavouriteKey != "" && e.KeyCode == (Keys)Enum.Parse(typeof(Keys), Settings.GoToFavouriteKey, true))
-                {
-                    Console.WriteLine("Fired event GoToFavouriteKey");
-
-                    writeFile("goToFavourite", "0");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex.ToString());
-            }
-        }
-
-        public void Unsubscribe()
-        {
-            m_GlobalHook.KeyDown -= GlobalHookKeyDown;
-
-            //It is recommened to dispose it
-            m_GlobalHook.Dispose();
-        }
-        private void keyTimeout_Tick(object sender, EventArgs e)
-        {
-            keyTimeout.Stop();
-            writeFile("next", amount.ToString());
-            amount = 0;
-            Console.WriteLine(amount);
-        }
-
-        private void writeFile(string action, string amount, string id = null)
-        {
-            if (id == null)
-            {
-                id = Guid.NewGuid().ToString("n");
-            }
-
-            Commands command = new Commands(id, action, amount, Settings.Language);
-            commandsData = command;
-        }
-        private void saveButton_Click(object sender, EventArgs e)
-        {
-            Settings.NextKey = nextKeyTextBox.Text;
-            Settings.PreviousKey = previousKeyTextBox.Text;
-            Settings.StopKey = stopKeyTextBox.Text;
-            Settings.VolumeUpKey = volumeUpKeyTextBox.Text;
-            Settings.VolumeDownKey = volumeDownKeyTextBox.Text;
-            Settings.MakeFavouriteKey = makeFavouriteKeyTextbox.Text;
-            Settings.GoToFavouriteKey = goToFavouriteKeyTextbox.Text;
-
-            Settings.NextButton = nextButtonTextBox.Text;
-            Settings.PreviousButton = previousButtonTextBox.Text;
-            Settings.StopButton = stopButtonTextBox.Text;
-            Settings.VolumeUpButton = volumeUpButtonTextBox.Text;
-            Settings.VolumeDownButton = volumeDownButtonTextBox.Text;
-            Settings.MakeFavouriteButton = makeFavouriteButtonTextbox.Text;
-            Settings.GoToFavouriteButton = goToFavouriteButtonTextbox.Text;
-
-            Settings.Save();
-        }
-
-        /*
-        public static void SaveAppSettings(string key, string value)
-        {
-            try
-            {
-                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var settings = configFile.AppSettings.Settings;
-                if (settings[key] == null)
-                {
-                    settings.Add(key, value);
-                }
-                else
-                {
-                    settings[key].Value = value;
-                }
-                configFile.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
-                Console.WriteLine(configFile.FilePath);
-            }
-            catch (ConfigurationErrorsException ex)
-            {
-                Console.WriteLine("Error writing app settings");
-                Log.Write(ex.ToString());
-            }
-        }
-        */
-
-        private void keyInput(object sender, KeyEventArgs e)
-        {
-            TextBox txtBox = (TextBox)sender;
-            e.Handled = true;
-            e.SuppressKeyPress = true;
-            txtBox.Text = e.KeyCode.ToString();
-        }
-        private void removeBinding(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Escape || e.KeyCode == Keys.Back)
-            {
-                TextBox txtBox = (TextBox)sender;
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-                txtBox.Clear();
-            }
-        }
-
-        private void URLLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(infoView.comboIP.SelectedItem.ToString());
         }
 
         private void Koenvh_Click(object sender, EventArgs e)
@@ -565,16 +307,16 @@ namespace ETS2_Local_Radio_server
                 infoView.URLInfo.Text = (server["url"] ?? infoView.URLInfo.Text);
                 infoView.URLLabel.Text = (server["open-local-radio"] ?? infoView.URLLabel.Text);
                 groupSettings.Text = (server["settings"] ?? groupSettings.Text);
-                keyLabel.Text = (server["keyboard"] ?? keyLabel.Text);
-                buttonLabel.Text = (server["controller"] ?? buttonLabel.Text);
-                nextKeyLabel.Text = (server["next-station-key"] ?? nextKeyLabel.Text);
-                previousKeyLabel.Text = (server["previous-station-key"] ?? previousKeyLabel.Text);
-                stopKeyLabel.Text = (server["stop-playback-key"] ?? stopKeyLabel.Text);
-                volumeUpKeyLabel.Text = (server["volume-up-key"] ?? volumeUpKeyLabel.Text);
-                volumeDownKeyLabel.Text = (server["volume-down-key"] ?? volumeDownKeyLabel.Text);
-                makeFavouriteKeyLabel.Text = (server["make-favourite-key"] ?? makeFavouriteKeyLabel.Text);
-                goToFavouriteKeyLabel.Text = (server["go-to-favourite-key"] ?? goToFavouriteKeyLabel.Text);
-                saveButton.Text = (server["save"] ?? saveButton.Text);
+                settingsView.keyLabel.Text = (server["keyboard"] ?? settingsView.keyLabel.Text);
+                settingsView.buttonLabel.Text = (server["controller"] ?? settingsView.buttonLabel.Text);
+                settingsView.nextKeyLabel.Text = (server["next-station-key"] ?? settingsView.nextKeyLabel.Text);
+                settingsView.previousKeyLabel.Text = (server["previous-station-key"] ?? settingsView.previousKeyLabel.Text);
+                settingsView.stopKeyLabel.Text = (server["stop-playback-key"] ?? settingsView.stopKeyLabel.Text);
+                settingsView.volumeUpKeyLabel.Text = (server["volume-up-key"] ?? settingsView.volumeUpKeyLabel.Text);
+                settingsView.volumeDownKeyLabel.Text = (server["volume-down-key"] ?? settingsView.volumeDownKeyLabel.Text);
+                settingsView.makeFavouriteKeyLabel.Text = (server["make-favourite-key"] ?? settingsView.makeFavouriteKeyLabel.Text);
+                settingsView.goToFavouriteKeyLabel.Text = (server["go-to-favourite-key"] ?? settingsView.goToFavouriteKeyLabel.Text);
+                settingsView.saveButton.Text = (server["save"] ?? settingsView.saveButton.Text);
                 groupController.Text = (server["controller"] ?? groupController.Text);
                 groupInstall.Text = (server["install"] ?? groupInstall.Text);
                 installAtsButton.Text = (server["install-plugin-ats"] ?? installAtsButton.Text);
@@ -587,7 +329,7 @@ namespace ETS2_Local_Radio_server
 
                 Settings.Language = comboLang.SelectedItem.ToString();
 
-                writeFile("language", "0");
+                Program.CommandsData = new Commands("Language");
             }
             catch (Exception ex)
             {
@@ -598,144 +340,59 @@ namespace ETS2_Local_Radio_server
 
         private void joystickTimer_Tick(object sender, EventArgs e)
         {
-            if (joystick == null)
+            var length = _input.GlobalHookJoystick(_joystick);
+
+            for (var i = 0; i < length; i++)
             {
-                AttachJoystick();
-                if (joystick == null)
+                if (settingsView.nextButtonTextBox.Focused)
                 {
-                    return;
+                    settingsView.nextButtonTextBox.Text = i.ToString();
                 }
-            }
-            try
-            {
-                bool[] controllerInput = new bool[joystick.State.GetButtons().Length + 4]; // = joystick.State.GetButtons().Concat(joystick.State.GetPointOfViewControllers()).ToArray();
-                joystick.State.GetButtons().CopyTo(controllerInput, 0);
-                bool[] povState = new bool[4] { false, false, false, false };
-
-                switch (joystick.State.GetPointOfViewControllers()[0])
+                if (settingsView.previousButtonTextBox.Focused)
                 {
-                    case 0:
-                        povState[0] = true;
-                        break;
-                    case 9000:
-                        povState[1] = true;
-                        break;
-                    case 18000:
-                        povState[2] = true;
-                        break;
-                    case 27000:
-                        povState[3] = true;
-                        break;
-                    default:
-                        break;
+                    settingsView.previousButtonTextBox.Text = i.ToString();
                 }
-                povState.CopyTo(controllerInput, joystick.State.GetButtons().Length);
-
-                for (int i = 0; i < controllerInput.Length; i++)
+                if (settingsView.stopButtonTextBox.Focused)
                 {
-
-                    if (controllerInput[i] == true && controllerInput[i] != previousState[i])
-                    {
-                        if (Settings.NextButton == i.ToString())
-                        {
-                            Console.WriteLine("Fired event NextButton");
-                            keyTimeout.Stop();
-                            amount++;
-                            keyTimeout.Start();
-                        }
-                        if (Settings.PreviousButton == i.ToString())
-                        {
-                            Console.WriteLine("Fired event PreviousButton");
-                            keyTimeout.Stop();
-                            amount--;
-                            keyTimeout.Start();
-                        }
-                        if (Settings.StopButton == i.ToString())
-                        {
-                            Console.WriteLine("Fired event StopButton");
-
-                            writeFile("stop", "0");
-                        }
-                        if (Settings.VolumeUpButton == i.ToString())
-                        {
-                            Console.WriteLine("Fired event VolumeUpButton");
-
-                            writeFile("volume", "5");
-                        }
-                        if (Settings.VolumeDownButton == i.ToString())
-                        {
-                            Console.WriteLine("Fired event VolumeDownButton");
-
-                            writeFile("volume", "-5");
-                        }
-                        if (Settings.MakeFavouriteButton == i.ToString())
-                        {
-                            Console.WriteLine("Fired event MakeFavouriteButton");
-
-                            writeFile("favourite", "0");
-                        }
-                        if (Settings.GoToFavouriteButton == i.ToString())
-                        {
-                            Console.WriteLine("Fired event GoToFavouriteButton");
-
-                            writeFile("goToFavourite", "0");
-                        }
-                        if (nextButtonTextBox.Focused)
-                        {
-                            nextButtonTextBox.Text = i.ToString();
-                        }
-                        if (previousButtonTextBox.Focused)
-                        {
-                            previousButtonTextBox.Text = i.ToString();
-                        }
-                        if (stopButtonTextBox.Focused)
-                        {
-                            stopButtonTextBox.Text = i.ToString();
-                        }
-                        if (volumeUpButtonTextBox.Focused)
-                        {
-                            volumeUpButtonTextBox.Text = i.ToString();
-                        }
-                        if (volumeDownButtonTextBox.Focused)
-                        {
-                            volumeDownButtonTextBox.Text = i.ToString();
-                        }
-                        if (makeFavouriteButtonTextbox.Focused)
-                        {
-                            makeFavouriteButtonTextbox.Text = i.ToString();
-                        }
-                        if (goToFavouriteButtonTextbox.Focused)
-                        {
-                            goToFavouriteButtonTextbox.Text = i.ToString();
-                        }
-                    }
+                    settingsView.stopButtonTextBox.Text = i.ToString();
                 }
-                previousState = controllerInput;
-            }
-            catch (Exception)
-            {
-                //Log.Write(ex.ToString());
+                if (settingsView.volumeUpButtonTextBox.Focused)
+                {
+                    settingsView.volumeUpButtonTextBox.Text = i.ToString();
+                }
+                if (settingsView.volumeDownButtonTextBox.Focused)
+                {
+                    settingsView.volumeDownButtonTextBox.Text = i.ToString();
+                }
+                if (settingsView.makeFavouriteButtonTextbox.Focused)
+                {
+                    settingsView.makeFavouriteButtonTextbox.Text = i.ToString();
+                }
+                if (settingsView.goToFavouriteButtonTextbox.Focused)
+                {
+                    settingsView.goToFavouriteButtonTextbox.Text = i.ToString();
+                }
             }
         }
 
         private void currentGameTimer_Tick(object sender, EventArgs e)
         {
-            if (currentGame != "ets2")
+            if (Program.Game != "ets2")
             {
                 if (Process.GetProcessesByName("eurotrucks2").Length > 0)
                 {
-                    currentGame = "ets2";
+                    Program.Game = "ets2";
                     infoView.gameLabel.Text = "Euro Truck Simulator 2";
-                    writeFile("game", "0", "0");
+                    Program.CommandsData = new Commands("Game");
                 }
             }
-            if (currentGame != "ats")
+            if (Program.Game != "ats")
             {
                 if (Process.GetProcessesByName("amtrucks").Length > 0)
                 {
-                    currentGame = "ats";
+                    Program.Game = "ats";
                     infoView.gameLabel.Text = "American Truck Simulator";
-                    writeFile("game", "0", "0");
+                    Program.CommandsData = new Commands("Game");
                 }
             }
         }

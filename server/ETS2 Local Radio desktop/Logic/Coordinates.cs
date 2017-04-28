@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ETS2_Local_Radio_server
+namespace ETS2_Local_Radio_server.Logic
 {
     public class Coordinates
     {

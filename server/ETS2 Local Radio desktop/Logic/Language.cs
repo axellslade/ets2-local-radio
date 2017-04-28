@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace ETS2_Local_Radio_server
+namespace ETS2_Local_Radio_server.Logic
 {
     class Language
     {
-        internal string Lang = "en-GB";
+        private readonly string Lang = "en-GB";
 
         public Language(string lang)
         {
@@ -19,11 +19,24 @@ namespace ETS2_Local_Radio_server
 
         public dynamic GetFile()
         {
-            StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "\\web\\lang\\" + Lang + ".json");
-            string content = reader.ReadToEnd();
-            dynamic data = JObject.Parse(content);
-            dynamic server = data.server;
-            return server;
+            try
+            {
+                var reader =
+                    new StreamReader(Directory.GetCurrentDirectory() + "\\web\\lang\\" + Lang + ".json");
+                var content = reader.ReadToEnd();
+                dynamic data = JObject.Parse(content);
+                dynamic server = data.server;
+                return server;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public void Load()
+        {
+            
         }
     }
 }

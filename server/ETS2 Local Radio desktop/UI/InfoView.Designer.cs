@@ -129,6 +129,7 @@
             this.URLLabel.TabStop = true;
             this.URLLabel.Text = "Open ETS2 Local Radio";
             this.URLLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.URLLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.URLLabel_LinkClicked);
             // 
             // InfoView
             // 

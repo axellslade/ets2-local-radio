@@ -19,7 +19,7 @@ using System.Windows.Forms;
 using ETS2_Local_Radio_server.Properties;
 using Svg;
 
-namespace ETS2_Local_Radio_server
+namespace ETS2_Local_Radio_server.Logic
 {
     static class Station
     {

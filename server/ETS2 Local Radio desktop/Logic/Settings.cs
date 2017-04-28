@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ETS2_Local_Radio_server
+namespace ETS2_Local_Radio_server.Logic
 {
     static class Settings
     {
+        private static bool _loaded = false;
+
         public static string Language = "en-GB";
         public static int Port = 8330;
         public static bool Overlay = true;
@@ -37,7 +39,7 @@ namespace ETS2_Local_Radio_server
 
         public static void Load()
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\settings.json"))
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\settings.json") && !_loaded)
             {
                 System.IO.StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "\\settings.json");
                 dynamic s = JObject.Parse(reader.ReadToEnd());
@@ -66,6 +68,8 @@ namespace ETS2_Local_Radio_server
 
                 Ets2Folder = s.folders.ets2 ?? Ets2Folder;
                 AtsFolder = s.folders.ats ?? AtsFolder;
+
+                _loaded = true;
             }
         }
 

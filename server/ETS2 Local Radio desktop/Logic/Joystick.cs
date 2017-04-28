@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using SlimDX.Direct3D9;
 using SlimDX.DirectInput;
 
-namespace ETS2_Local_Radio_server
+namespace ETS2_Local_Radio_server.Logic
 {
     class SimpleJoystick
     {

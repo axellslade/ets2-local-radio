@@ -99,14 +99,22 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands.cs" />
-    <Compile Include="Coordinates.cs" />
-    <Compile Include="Favourites.cs" />
-    <Compile Include="Joystick.cs" />
-    <Compile Include="Language.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Logic\Commands.cs" />
+    <Compile Include="Logic\CommandService.cs" />
+    <Compile Include="Logic\Coordinates.cs" />
+    <Compile Include="Logic\Favourites.cs" />
+    <Compile Include="Logic\Firewall.cs" />
+    <Compile Include="Logic\Joystick.cs" />
+    <Compile Include="Logic\Input.cs" />
+    <Compile Include="Logic\Language.cs" />
+    <Compile Include="Logic\Log.cs" />
+    <Compile Include="Logic\Plugins.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,15 +123,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="SimpleServer.cs" />
-    <Compile Include="Splash.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Splash.Designer.cs">
-      <DependentUpon>Splash.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Station.cs" />
+    <Compile Include="Logic\Settings.cs" />
+    <Compile Include="Logic\SimpleServer.cs" />
+    <Compile Include="Logic\Station.cs" />
     <Compile Include="UI\InfoView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -149,9 +151,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Splash.resx">
-      <DependentUpon>Splash.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\InfoView.resx">
       <DependentUpon>InfoView.cs</DependentUpon>
     </EmbeddedResource>
