@@ -1,0 +1,41 @@
+{
+  "name": "ets2-local-radio",
+  "version": "2.0.0",
+  "description": "ETS2 Local Radio",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "Koenvh",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "electron": "~1.6.11"
+  },
+  "iohook": {
+    "targets": [
+      "electron-53"
+    ],
+    "platforms": [
+      "win32"
+    ],
+    "arches": [
+      "x64",
+      "ia32"
+    ]
+  },
+  "cmake-js": {
+    "runtime": "electron",
+    "runtimeVersion": "1.6.11"
+  },
+  "dependencies": {
+    "gkm": "^0.1.0"
+  }
+}
