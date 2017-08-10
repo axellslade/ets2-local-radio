@@ -18,7 +18,7 @@ namespace ETS2_Local_Radio_server
             try
             {
                 using (StreamWriter file =
-                    File.AppendText(Directory.GetCurrentDirectory() + "\\Error log.txt"))
+                    File.AppendText(Program.APPLICATION_DATA + "\\log.txt"))
                 {
                     file.WriteLine(lines);
                 }
@@ -35,7 +35,7 @@ namespace ETS2_Local_Radio_server
         {
             try
             {
-                System.IO.StreamWriter file = new System.IO.StreamWriter(Directory.GetCurrentDirectory() + "\\Error log.txt");
+                System.IO.StreamWriter file = new System.IO.StreamWriter(Program.APPLICATION_DATA + "\\log.txt");
                 file.Write("");
                 file.Close();
             }

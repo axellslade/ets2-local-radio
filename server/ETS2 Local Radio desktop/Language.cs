@@ -17,8 +17,7 @@ namespace ETS2_Local_Radio_server
             StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "\\Language\\" + lang + ".json");
             string content = reader.ReadToEnd();
             dynamic data = JObject.Parse(content);
-            dynamic server = data.server;
-            Data = server;
+            Data = data; 
         }
     }
 }

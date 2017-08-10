@@ -16,5 +16,21 @@ namespace ETS2_Local_Radio_server.UIComponents
         {
             InitializeComponent();
         }
+
+        private void installAtsButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Plugin_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void installEts2Button_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

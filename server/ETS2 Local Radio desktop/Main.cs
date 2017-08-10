@@ -32,7 +32,8 @@ namespace ETS2_Local_Radio_server
 
         private void Main_Load(object sender, EventArgs e)
         {
-
+            Settings.Load();
+            var server = new Server.Server(Settings.Port);
         }
     }
 }

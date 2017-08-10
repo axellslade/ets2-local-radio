@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -81,8 +82,8 @@ namespace ETS2_Local_Radio_server.Server
         {".xml", "text/xml"},
         {".xpi", "application/x-xpinstall"},
         {".zip", "application/zip"},
-        #endregion
-    };
+            #endregion
+        };
         private HttpServer httpServer;
 
         public Server(int port)
@@ -95,14 +96,17 @@ namespace ETS2_Local_Radio_server.Server
                 var res = e.Response;
 
                 var path = req.RawUrl;
-                if(path == "/")
+                if(path == "/" || path == "")
                 {
                     path += "index.html";
                 }
                 try
                 {
-                    byte[] contents = File.ReadAllBytes(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "web", path)));
-                    res.ContentType = _mimeTypeMappings["." + Path.GetExtension(path)];
+                    byte[] contents = File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\web" + path.Replace("/", @"\"));
+                        string mime;
+                        res.ContentType = _mimeTypeMappings.TryGetValue(Path.GetExtension(path), out mime)
+                        ? mime
+                        : "application/octet-stream";
                     res.ContentEncoding = Encoding.UTF8;
                     res.WriteContent(contents);
                 }
@@ -119,6 +123,7 @@ namespace ETS2_Local_Radio_server.Server
             };
 
             httpServer.AddWebSocketService<Sdk>("/sdk");
+            httpServer.AddWebSocketService<Command>("/command");
 
             httpServer.OnPost += (sender, e) =>
             {
@@ -148,8 +153,16 @@ namespace ETS2_Local_Radio_server.Server
                             }
                         }
                         break;
+                    case "/language":
+                        res.ContentType = "application/json";
+                        res.ContentEncoding = Encoding.UTF8;
+                        string text2 = JsonConvert.SerializeObject(Language.Data);
+                        res.WriteContent(Encoding.UTF8.GetBytes(text2));
+                        break;
                 }
             };
+
+            httpServer.Start();
         }
     }
 }

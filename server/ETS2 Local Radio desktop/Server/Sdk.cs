@@ -17,12 +17,6 @@ namespace ETS2_Local_Radio_server.Server
             var telemetry = new Ets2SdkTelemetry(250);
             telemetry.Data += (data, updated) =>
             {
-                if (this.InvokeRequired)
-                {
-                    this.Invoke(new TelemetryData(Telemetry_Data), new object[2] { data, updated });
-                    return;
-                }
-
                 Send(JsonConvert.SerializeObject(data));
             };
         }

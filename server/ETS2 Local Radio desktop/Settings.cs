@@ -37,9 +37,9 @@ namespace ETS2_Local_Radio_server
 
         public static void Load()
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\settings.json"))
+            if (File.Exists(Program.APPLICATION_DATA + "\\settings.json"))
             {
-                System.IO.StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "\\settings.json");
+                System.IO.StreamReader reader = new StreamReader(Program.APPLICATION_DATA + "\\settings.json");
                 dynamic s = JObject.Parse(reader.ReadToEnd());
                 reader.Close();
 
@@ -71,7 +71,7 @@ namespace ETS2_Local_Radio_server
 
         public static void Save()
         {
-            System.IO.StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "\\settings.json");
+            System.IO.StreamWriter writer = new StreamWriter(Program.APPLICATION_DATA + "\\settings.json");
             writer.Write(JObject.FromObject(new
             {
                 language = Language,

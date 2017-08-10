@@ -40,16 +40,18 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPlugin = new System.Windows.Forms.TabPage();
             this.tabControls = new System.Windows.Forms.TabPage();
-            this.controlSettings = new ETS2_Local_Radio_server.UIComponents.ControlSettings();
             this.tabMaps = new System.Windows.Forms.TabPage();
             this.tabStations = new System.Windows.Forms.TabPage();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.plugin1 = new ETS2_Local_Radio_server.UIComponents.Plugin();
+            this.controlSettings = new ETS2_Local_Radio_server.UIComponents.ControlSettings();
+            this.maps1 = new ETS2_Local_Radio_server.UIComponents.Maps();
             ((System.ComponentModel.ISupportInitialize)(this.Koenvh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Logo)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabPlugin.SuspendLayout();
             this.tabControls.SuspendLayout();
+            this.tabMaps.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboLang
@@ -131,16 +133,9 @@
             this.tabControls.Text = "Controls";
             this.tabControls.UseVisualStyleBackColor = true;
             // 
-            // controlSettings
-            // 
-            this.controlSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.controlSettings.Location = new System.Drawing.Point(3, 3);
-            this.controlSettings.Name = "controlSettings";
-            this.controlSettings.Size = new System.Drawing.Size(399, 288);
-            this.controlSettings.TabIndex = 0;
-            // 
             // tabMaps
             // 
+            this.tabMaps.Controls.Add(this.maps1);
             this.tabMaps.Location = new System.Drawing.Point(4, 22);
             this.tabMaps.Name = "tabMaps";
             this.tabMaps.Size = new System.Drawing.Size(405, 294);
@@ -174,6 +169,22 @@
             this.plugin1.Size = new System.Drawing.Size(399, 288);
             this.plugin1.TabIndex = 0;
             // 
+            // controlSettings
+            // 
+            this.controlSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.controlSettings.Location = new System.Drawing.Point(3, 3);
+            this.controlSettings.Name = "controlSettings";
+            this.controlSettings.Size = new System.Drawing.Size(399, 288);
+            this.controlSettings.TabIndex = 0;
+            // 
+            // maps1
+            // 
+            this.maps1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.maps1.Location = new System.Drawing.Point(0, 0);
+            this.maps1.Name = "maps1";
+            this.maps1.Size = new System.Drawing.Size(405, 294);
+            this.maps1.TabIndex = 0;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -194,6 +205,7 @@
             this.tabControl.ResumeLayout(false);
             this.tabPlugin.ResumeLayout(false);
             this.tabControls.ResumeLayout(false);
+            this.tabMaps.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -215,5 +227,6 @@
         private UIComponents.ControlSettings controlSettings;
         private System.Windows.Forms.TabPage tabStations;
         private UIComponents.Plugin plugin1;
+        private UIComponents.Maps maps1;
     }
 }

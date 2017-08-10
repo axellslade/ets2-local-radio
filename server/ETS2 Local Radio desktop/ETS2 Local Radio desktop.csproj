@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\Command.cs" />
     <Compile Include="Server\Sdk.cs" />
     <Compile Include="Server\Favourite.cs" />
     <Compile Include="Server\Server.cs" />
@@ -130,6 +131,12 @@
     </Compile>
     <Compile Include="UIComponents\ControlSettings.Designer.cs">
       <DependentUpon>ControlSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UIComponents\Maps.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UIComponents\Maps.Designer.cs">
+      <DependentUpon>Maps.cs</DependentUpon>
     </Compile>
     <Compile Include="UIComponents\Plugin.cs">
       <SubType>UserControl</SubType>
@@ -152,6 +159,9 @@
     </Compile>
     <EmbeddedResource Include="UIComponents\ControlSettings.resx">
       <DependentUpon>ControlSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIComponents\Maps.resx">
+      <DependentUpon>Maps.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIComponents\Plugin.resx">
       <DependentUpon>Plugin.cs</DependentUpon>

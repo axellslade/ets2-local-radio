@@ -164,6 +164,7 @@
             this.installEts2Button.TabIndex = 24;
             this.installEts2Button.Text = "Install plugin for \r\nEuro Truck Simulator 2";
             this.installEts2Button.UseVisualStyleBackColor = true;
+            this.installEts2Button.Click += new System.EventHandler(this.installEts2Button_Click);
             // 
             // installAtsButton
             // 
@@ -176,8 +177,9 @@
             this.installAtsButton.TabIndex = 23;
             this.installAtsButton.Text = "Install plugin for \r\nAmerican Truck Simulator";
             this.installAtsButton.UseVisualStyleBackColor = true;
+            this.installAtsButton.Click += new System.EventHandler(this.installAtsButton_Click);
             // 
-            // Info
+            // Plugin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -193,8 +195,9 @@
             this.Controls.Add(this.statusInfo);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.URLLabel);
-            this.Name = "Info";
+            this.Name = "Plugin";
             this.Size = new System.Drawing.Size(399, 288);
+            this.Load += new System.EventHandler(this.Plugin_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

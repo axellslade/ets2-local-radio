@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -15,6 +16,10 @@ namespace ETS2_Local_Radio_server
         [STAThread]
         static void Main()
         {
+            if(!Directory.Exists(APPLICATION_DATA))
+            {
+                Directory.CreateDirectory(APPLICATION_DATA);
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Main());
