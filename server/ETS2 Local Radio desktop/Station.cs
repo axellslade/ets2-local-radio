@@ -228,7 +228,7 @@ namespace ETS2_Local_Radio_server
                     {
                         Timer.Enabled = false;
                         Timer.Stop();
-                        GPPIC_ShowPicturePos(false, (width / 2) - (Resources.overlay.Width / 2), (height / 4));
+                        GPPIC_ShowPicturePos(false, (width / 2) - (Resources.overlay_double.Width / 2), (height / 4));
                         //GPPICI_ShowInternalPicturePos(false, (width/2) - (Resources.overlay.Width/2), (height/4));
                         //Log.Write("Hide overlay");
                     };

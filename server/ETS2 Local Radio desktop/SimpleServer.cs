@@ -261,8 +261,8 @@ namespace ETS2_Local_Radio_server
             }
             else if (context.Request.Url.AbsolutePath == "/api/")
             {
-                string text = Newtonsoft.Json.JsonConvert.SerializeObject(Main.ets2data);
-
+                //string text = Newtonsoft.Json.JsonConvert.SerializeObject(Main.ets2data);
+                string text = "";
                 context.Response.ContentType = "application/json";
                 context.Response.ContentLength64 = Encoding.UTF8.GetBytes(text).Length;
                 context.Response.StatusCode = (int)HttpStatusCode.OK;
@@ -271,8 +271,8 @@ namespace ETS2_Local_Radio_server
             }
             else if (context.Request.Url.AbsolutePath == "/commands/")
             {
-                string text = Newtonsoft.Json.JsonConvert.SerializeObject(Main.commandsData);
-
+                //string text = Newtonsoft.Json.JsonConvert.SerializeObject(Main.commandsData);
+                string text = "";
                 context.Response.ContentType = "application/json";
                 context.Response.ContentLength64 = Encoding.UTF8.GetBytes(text).Length;
                 context.Response.StatusCode = (int)HttpStatusCode.OK;

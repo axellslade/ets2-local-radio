@@ -73,16 +73,6 @@ namespace ETS2_Local_Radio_server.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dashboard {
-            get {
-                object obj = ResourceManager.GetObject("dashboard", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
@@ -103,9 +93,9 @@ namespace ETS2_Local_Radio_server.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap overlay {
+        internal static System.Drawing.Bitmap Local_Radio_Logo {
             get {
-                object obj = ResourceManager.GetObject("overlay", resourceCulture);
+                object obj = ResourceManager.GetObject("Local_Radio_Logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

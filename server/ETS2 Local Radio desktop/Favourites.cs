@@ -24,27 +24,27 @@ namespace ETS2_Local_Radio_server
             }
         }
 
-        public static string Get(string key)
+        public static string Get(string key = null)
         {
-            if (key == "")
-            {
+            //if (key == null)
+            //{
                 return JsonConvert.SerializeObject(storage, Formatting.Indented);
-            }
-            if (storage.ContainsKey(key))
-            {
-                return storage[key];
-            }
-            else
-            {
-                return null;
-            }
+            //}
+            //if (storage.ContainsKey(key))
+            //{
+            //    return storage[key];
+            //}
+            //else
+            //{
+            //    return null;
+            //}
         }
 
         public static void Load()
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\favourites.json"))
+            if (File.Exists(Program.APPLICATION_DATA + "\\favourites.json"))
             {
-                System.IO.StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + "\\favourites.json");
+                System.IO.StreamReader reader = new StreamReader(Program.APPLICATION_DATA + "\\favourites.json");
                 storage = JsonConvert.DeserializeObject<Dictionary<string, string>>(reader.ReadToEnd());
                 reader.Close();
             }
@@ -57,7 +57,7 @@ namespace ETS2_Local_Radio_server
 
         public static void Save()
         {
-            System.IO.StreamWriter writer = new StreamWriter(Directory.GetCurrentDirectory() + "\\favourites.json");
+            System.IO.StreamWriter writer = new StreamWriter(Program.APPLICATION_DATA + "\\favourites.json");
             writer.Write(JsonConvert.SerializeObject(storage, Formatting.Indented));
             writer.Close();
         }

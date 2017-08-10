@@ -7,6 +7,8 @@ namespace ETS2_Local_Radio_server
 {
     static class Program
     {
+
+        static public string APPLICATION_DATA = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Local Radio";
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
